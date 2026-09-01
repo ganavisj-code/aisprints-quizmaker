@@ -11,9 +11,11 @@ the problem, the primary user, and the current state. Two or three sentences.
 Keep it current. An out-of-date description here misleads every future conversation.
 -->
 
-This is an unmodified AISprints starter. No application features have been built yet.
-The technical PRD in `ai-workspace/` is the source of truth for what is being built and
-for the current phase of work.
+QuizMaker is a greenfield app for teachers who will collaborate on a shared
+multiple-choice test bank. Phase 1 added D1 user persistence and a user service.
+Register, login, logout, and MCQ features are not built yet. The technical PRD in
+`ai-workspace/register-login-logout_prd.md` is the source of truth for the current
+phase of work.
 
 ## Stack
 
@@ -24,8 +26,9 @@ for the current phase of work.
 - **TypeScript** in strict mode
 - **Wrangler** for Cloudflare configuration, secrets, and deployment
 
-No database, authentication, testing framework, or AI SDK is installed yet. Do not
-write code that imports one without adding it first and telling the user.
+Cloudflare D1 is configured with binding `DB` (database `quizmaker`). Vitest is the
+unit test framework. No authentication library or AI SDK is installed yet. Do not
+write code that imports a new one without adding it first and telling the user.
 
 ## Layout
 
