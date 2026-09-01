@@ -259,7 +259,7 @@ Run `npm test` and confirm these fail (missing module or failed assertions).
 
 **Phase done when**: the nine cases above pass and a local migration exists. Do not start route handlers while these are red.
 
-### Phase 2: Register, login, and logout endpoints - PLANNED
+### Phase 2: Register, login, and logout endpoints - COMPLETED
 
 **Objective**: HTTP POST handlers that use the user service. No tokens. No cookies.
 
@@ -368,10 +368,11 @@ Run `npm test` and confirm the new cases fail.
 - `src/test/server-only-stub.ts` — Vitest alias target for `server-only`
 - `wrangler.jsonc` — D1 `DB` binding to database `quizmaker` (`29f71fd6-dca2-40f9-8d43-aa09f99a0360`)
 - `vitest.config.ts` — Vitest harness
+- `src/lib/auth-schemas.ts` — Zod schemas for register and login bodies
+- `src/app/api/register/route.ts` + `route.test.ts` — Phase 2 register
+- `src/app/api/login/route.ts` + `route.test.ts` — Phase 2 login
+- `src/app/api/logout/route.ts` + `route.test.ts` — Phase 2 logout
 - `src/lib/password.ts` — Phase 3: client hash helper (not created yet)
-- `src/app/api/register/route.ts` — Phase 2
-- `src/app/api/login/route.ts` — Phase 2
-- `src/app/api/logout/route.ts` — Phase 2
 - `src/app/register/page.tsx` — Phase 3
 - `src/app/login/page.tsx` — Phase 3
 - `src/app/mcqs/page.tsx` — Phase 3
@@ -430,20 +431,21 @@ WHERE username = ?1;
 
 ## Acceptance Criteria
 
-- [ ] A teacher can register with first name, last name, username, email, and password
+- [x] A teacher can register with first name, last name, username, email, and password (API)
 - [ ] Username and email may be the same value and both persist (user service)
 - [ ] The value stored in `users.password` is a hash, not the plaintext the teacher typed (user service stores the provided hash)
 - [ ] The register and login POSTs send a hashed password, not plaintext
-- [ ] A successful register returns 201 and the UI redirects to `/mcqs`
-- [ ] A successful login returns 200 and the UI redirects to `/mcqs`
-- [ ] A wrong password or unknown username returns 401 with a generic error and does not redirect
-- [x] A duplicate username or email surfaces `UserConflictError` (endpoints will map this to 409 in Phase 2)
-- [ ] Logout calls `POST /api/logout` and returns the teacher to `/login`
+- [x] A successful register returns 201 (UI redirect is Phase 3)
+- [x] A successful login returns 200 (UI redirect is Phase 3)
+- [x] A wrong password or unknown username returns 401 with the same generic error
+- [x] A duplicate username or email returns 409 and does not create a second row
+- [x] `POST /api/logout` returns `{ ok: true }` (UI navigation is Phase 3)
 - [ ] `/mcqs` is a stub only — no MCQ create/list/edit
 - [ ] No cookies, session rows, or tokens are created
 - [ ] No social login UI or provider config exists
-- [x] Phase 1 has colocated Vitest coverage written before the production code
-- [x] `npm test` (Vitest) is green for Phase 1 (9 tests)
+- [x] Phases 1–2 have colocated Vitest coverage written before the production code
+- [x] `npm test` (Vitest) is green for Phases 1–2 (19 tests)
+- [x] Register and login success bodies have no token and set no `Set-Cookie` header
 - [ ] `npm run lint` and `npm run build` succeed
 
 ---
@@ -472,8 +474,8 @@ WHERE username = ?1;
 - `src/lib/services/user-service.ts` — database access for users
 - Next.js App Router route handlers — `/api/register`, `/api/login`, `/api/logout`
 - shadcn/ui `card`, `field`, `input`, `button` — already installed
-- Zod — proposed for request validation (not installed; ask before adding)
-- Vitest + Testing Library + jsdom + vite-tsconfig-paths — unit tests (approved for this PRD; install in Phase 0)
+- Zod — request validation for register and login (added in Phase 2)
+- Vitest + Testing Library + jsdom + vite-tsconfig-paths — unit tests
 
 ### Environment
 
@@ -547,10 +549,9 @@ When working with this PRD:
 ## Current Status
 
 **Last Updated**: 2026-09-01
-**Current Phase**: Phase 1 - Database and user service
-**Status**: COMPLETED — stopped for review before Phase 2
+**Current Phase**: Phase 2 - Register, login, and logout endpoints
+**Status**: COMPLETED — stopped for review before Phase 3
 **Verification**:
-- `npm test`: 9 passed
+- `npm run test`: 19 passed (4 files)
 - `npm run lint`: passed
-- `npm run build`: passed (Next.js 16.2.12)
-**Next Steps**: After review, Phase 2 TDD — failing register/login/logout route tests, then handlers
+**Next Steps**: After review and your go-ahead to commit/push, then Phase 3 pages. No migrations or deploys from the agent this session.
