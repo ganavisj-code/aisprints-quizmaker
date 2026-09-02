@@ -408,7 +408,7 @@ Run `npm test` and confirm the new cases fail.
 
 **Phase done when**: the twelve cases above pass. Do not start list/form pages while these are red.
 
-### Phase 4: List page - PLANNED
+### Phase 4: List page - COMPLETED
 
 **Objective**: `/mcqs` lists questions in a shadcn table with create and row actions. Logout still works.
 
@@ -427,15 +427,15 @@ Run `npm test` and confirm the new cases fail.
 Run `npm test` and confirm the new cases fail. Rewrite or replace `mcq-stub.test.tsx` so it no longer requires the stub-only copy.
 
 **Then implement until GREEN**:
-1. Ask, then add `dropdown-menu` if not already added
-2. Replace `McqStub` with a list component (new file under `src/components/mcqs/`; do not keep a stub that lies)
-3. Widen `/mcqs` page layout
-4. Wire Create, table, dropdown, delete dialog, logout
+1. ~~Ask, then add `dropdown-menu` if not already added~~
+2. ~~Replace `McqStub` with a list component (new file under `src/components/mcqs/`; do not keep a stub that lies)~~
+3. ~~Widen `/mcqs` page layout~~
+4. ~~Wire Create, table, dropdown, delete dialog, logout~~
 
 **Deliverables**:
-- List page and row-actions component
-- List/component tests
-- Phases 1–4 tests green
+- ~~List page and row-actions component~~ (`src/app/mcqs/page.tsx`, `src/components/mcqs/mcq-list.tsx`, `src/components/mcqs/mcq-row-actions.tsx`; `dropdown-menu` added)
+- ~~List/component tests~~ (`src/components/mcqs/mcq-list.test.tsx`, 9 passing; stub removed)
+- ~~Phases 1–4 tests green~~ (`npm test`: 75 passed)
 
 **Phase done when**: the nine cases above pass.
 
@@ -743,9 +743,9 @@ When working with this PRD:
 ## Current Status
 
 **Last Updated**: 2026-09-02
-**Current Phase**: Phase 4 - List page
-**Status**: Phase 3 COMPLETED — MCQ and attempt HTTP routes green. List UI not started
+**Current Phase**: Phase 5 - Create/edit form
+**Status**: Phase 4 COMPLETED — `/mcqs` table UI with create, row actions, delete confirm, and logout. Create/edit form not started
 **Verification**:
-- Route tests: RED (missing handlers), then GREEN (12 passing)
-- `npm test`: 68 passed (14 files)
-**Next Steps**: Phase 4 — write list-page tests first (RED), then replace the `/mcqs` stub with the table UI. Ask before adding `dropdown-menu`.
+- List tests: RED (missing `McqList`), then GREEN (9 passing)
+- `npm test`: 75 passed (14 files)
+**Next Steps**: Phase 5 — write create/edit form tests first (RED), then implement `/mcqs/new` and `/mcqs/[id]/edit`. Ask before adding `textarea` or `radio-group`.
