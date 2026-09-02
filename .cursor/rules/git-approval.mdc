@@ -1,0 +1,21 @@
+---
+description: After a completed phase, get user approval then commit and push to the current branch
+alwaysApply: true
+---
+
+# Phase review, then commit and push
+
+After finishing a phase (or another reviewable slice), **stop**. Do not start the next phase, commit, or push until the user has reviewed and approved.
+
+When the user approves (or explicitly asks to commit and push):
+
+1. Commit **only** the files for the work they approved. Leave unrelated dirty files unstaged.
+2. Commit on the **current branch**. Do not switch branches, merge, or rebase unless they ask.
+3. Push that branch to `origin` (`git push -u origin HEAD` if it has no upstream). Do not push to `main`/`master` unless they name that branch.
+4. Do not amend, force-push, skip hooks, or change git config.
+
+```text
+❌ BAD: phase tests go green → immediately start the next phase and leave work uncommitted
+❌ BAD: `git add -A` when auth UI and MCQ routes are both dirty but only MCQ was approved
+✅ GOOD: "Phase 3 is ready for review." Wait. On approval, stage those files, commit, push current branch
+```
