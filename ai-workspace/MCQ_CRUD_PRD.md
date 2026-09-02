@@ -307,7 +307,7 @@ npx shadcn@latest add @shadcn/radio-group
 
 ## Implementation Phases
 
-### Phase 1: Database and MCQ service - IN PROGRESS
+### Phase 1: Database and MCQ service - COMPLETED
 
 **Objective**: Persist questions and choices in D1 and expose list, get, create, update, and delete through a service. No HTTP yet.
 
@@ -316,7 +316,7 @@ npx shadcn@latest add @shadcn/radio-group
 2. `migrations/0002_create_mcqs.sql` creates `mcqs`, `mcq_choices`, and `mcq_attempts`
 3. Applied locally only (`npx wrangler d1 migrations apply quizmaker --local`) — 8 commands, status ✅. Not applied remotely
 
-**Tests first (expect RED)** — `src/lib/services/mcq-service.test.ts`, D1 mocked (not started):
+**Tests first (expect RED)** — `src/lib/services/mcq-service.test.ts`, D1 mocked:
 
 1. `create` persists name, question, and `createdByUserId` and returns an id
 2. `create` with two choices stores both, assigns `position` 1 and 2 from array order, and returns them
@@ -337,18 +337,18 @@ Run `npm test` and confirm these fail (missing module or failed assertions).
 **Then implement until GREEN**:
 1. ~~Create a D1 migration for `mcqs`, `mcq_choices`, and `mcq_attempts`~~
 2. ~~Apply the migration locally only~~
-3. Add `src/lib/services/mcq-service.ts` with create, update, deleteMcq, list, findById
-4. Map rows to camelCase public types; never expose raw `is_correct` integers on the public type (use boolean `isCorrect`)
-5. Use numbered placeholders and prepared statements only
+3. ~~Add `src/lib/services/mcq-service.ts` with create, update, deleteMcq, list, findById~~
+4. ~~Map rows to camelCase public types; never expose raw `is_correct` integers on the public type (use boolean `isCorrect`)~~
+5. ~~Use numbered placeholders and prepared statements only~~
 
 **Deliverables**:
 - ~~Local migration for the three tables~~ (`migrations/0002_create_mcqs.sql`, applied locally)
-- MCQ service module and colocated Vitest file
-- Phase 1 tests green
+- ~~MCQ service module and colocated Vitest file~~ (`src/lib/services/mcq-service.ts` + `.test.ts`, 13 passing)
+- ~~Phase 1 tests green~~ (`npm test`: 51 passed)
 
 **Phase done when**: the thirteen cases above pass and a local migration exists. Do not start attempt logic or route handlers while these are red.
 
-### Phase 2: Attempt service - PLANNED
+### Phase 2: Attempt service - COMPLETED
 
 **Objective**: Record an attempt against a choice and snapshot correctness.
 
@@ -363,16 +363,16 @@ Run `npm test` and confirm these fail (missing module or failed assertions).
 Run `npm test` and confirm the new cases fail.
 
 **Then implement until GREEN**:
-1. Add `src/lib/services/attempt-service.ts` (preferred) or attempt functions on the MCQ service
-2. Look up the choice, verify `mcq_id` matches, insert into `mcq_attempts`
+1. ~~Add `src/lib/services/attempt-service.ts`~~
+2. ~~Look up the choice, verify `mcq_id` matches, insert into `mcq_attempts`~~
 
 **Deliverables**:
-- Attempt service module and colocated tests
-- Phase 1 and Phase 2 tests green
+- ~~Attempt service module and colocated tests~~ (`src/lib/services/attempt-service.ts` + `.test.ts`, 5 passing)
+- ~~Phase 1 and Phase 2 tests green~~ (`npm test`: 56 passed)
 
 **Phase done when**: the five cases above pass. Do not start route handlers while these are red.
 
-### Phase 3: MCQ and attempt endpoints - PLANNED
+### Phase 3: MCQ and attempt endpoints - COMPLETED
 
 **Objective**: HTTP handlers that use the services. No pages yet beyond what already exists.
 
@@ -394,17 +394,17 @@ Run `npm test` and confirm the new cases fail.
 Run `npm test` and confirm the new cases fail.
 
 **Then implement until GREEN**:
-1. Add Zod schemas for MCQ create/update and attempt bodies (`src/lib/mcq-schemas.ts`)
-2. Implement `GET`/`POST` `/api/mcqs`
-3. Implement `GET`/`PUT`/`DELETE` `/api/mcqs/[id]`
-4. Implement `POST` `/api/mcqs/[id]/attempts`
-5. Map service not-found to 404 and validation errors to 400
+1. ~~Add Zod schemas for MCQ create/update and attempt bodies (`src/lib/mcq-schemas.ts`)~~
+2. ~~Implement `GET`/`POST` `/api/mcqs`~~
+3. ~~Implement `GET`/`PUT`/`DELETE` `/api/mcqs/[id]`~~
+4. ~~Implement `POST` `/api/mcqs/[id]/attempts`~~
+5. ~~Map service not-found to 404 and validation errors to 400~~
 
 **Deliverables**:
-- `src/app/api/mcqs/route.ts` + `.test.ts`
-- `src/app/api/mcqs/[id]/route.ts` + `.test.ts`
-- `src/app/api/mcqs/[id]/attempts/route.ts` + `.test.ts`
-- Phases 1–3 tests green
+- ~~`src/app/api/mcqs/route.ts` + `.test.ts`~~
+- ~~`src/app/api/mcqs/[id]/route.ts` + `.test.ts`~~
+- ~~`src/app/api/mcqs/[id]/attempts/route.ts` + `.test.ts`~~
+- ~~Phases 1–3 tests green~~ (`npm test`: 68 passed)
 
 **Phase done when**: the twelve cases above pass. Do not start list/form pages while these are red.
 
@@ -508,11 +508,11 @@ Run `npm test` and confirm the new cases fail.
 
 - `migrations/0002_create_mcqs.sql` — `mcqs`, `mcq_choices`, `mcq_attempts` (applied locally 2026-09-02)
 - `src/lib/mcq-schema.contract.test.ts` — schema contract tests for migration 0002 (5 passing)
-- `src/lib/services/mcq-service.ts` — list, findById, create, update, deleteMcq
-- `src/lib/services/mcq-service.test.ts`
-- `src/lib/services/attempt-service.ts` — createAttempt
-- `src/lib/services/attempt-service.test.ts`
-- `src/lib/mcq-schemas.ts` — Zod for MCQ and attempt bodies
+- `src/lib/services/mcq-service.ts` — list, findById, create, update, deleteMcq (D1 via `getDb()`, `batch()` for writes)
+- `src/lib/services/mcq-service.test.ts` — Phase 1 service tests (13 passing)
+- `src/lib/services/attempt-service.ts` — `createAttempt`; snapshots `isCorrect` from the choice; unknown MCQ or foreign choice throws `McqNotFoundError`
+- `src/lib/services/attempt-service.test.ts` — Phase 2 tests (5 passing)
+- `src/lib/mcq-schemas.ts` — Zod for MCQ create/update and attempt bodies
 - `src/app/api/mcqs/route.ts` + `route.test.ts` — GET list, POST create
 - `src/app/api/mcqs/[id]/route.ts` + `route.test.ts` — GET, PUT, DELETE
 - `src/app/api/mcqs/[id]/attempts/route.ts` + `route.test.ts` — POST attempt
@@ -618,8 +618,8 @@ Use `db.batch([...])` (D1) for create/update of the parent plus its choices so t
 - [ ] Preview shows the question prompt and choices without revealing the correct answer until an attempt is submitted
 - [ ] Submitting a preview answer writes `mcq_attempts` with the selected `choice_id` and a snapshot `is_correct`
 - [ ] Preview then tells the teacher whether the attempt was correct or incorrect
-- [ ] Unknown MCQ id on GET/PUT/DELETE/attempt returns 404
-- [ ] Invalid create/update bodies return 400 (including missing `question` or `createdByUserId` on create)
+- [x] Unknown MCQ id on GET/PUT/DELETE/attempt returns 404
+- [x] Invalid create/update bodies return 400 (including missing `question` or `createdByUserId` on create)
 - [ ] Logout on `/mcqs` still calls `POST /api/logout` and navigates to `/login`, and clears the stored user id
 - [ ] No cookies, session rows, or tokens are added. `created_by_user_id` is the only user FK on `mcqs`
 - [ ] Each phase has colocated Vitest coverage written before or with the production change
@@ -743,10 +743,9 @@ When working with this PRD:
 ## Current Status
 
 **Last Updated**: 2026-09-02
-**Current Phase**: Phase 1 - Database and MCQ service
-**Status**: IN PROGRESS — schema contract + local migration done; MCQ service not started
+**Current Phase**: Phase 4 - List page
+**Status**: Phase 3 COMPLETED — MCQ and attempt HTTP routes green. List UI not started
 **Verification**:
-- Schema contract tests: RED (missing `0002`), then GREEN after SQL
-- `npm test`: 38 passed (9 files) — 33 existing + 5 schema contract
-- `npx wrangler d1 migrations apply quizmaker --local`: `0002_create_mcqs.sql` ✅ (8 commands). Not applied remotely
-**Next Steps**: Phase 1 remainder — write `mcq-service.test.ts` first (RED), then implement `mcq-service.ts` until GREEN. Do not start Phase 2.
+- Route tests: RED (missing handlers), then GREEN (12 passing)
+- `npm test`: 68 passed (14 files)
+**Next Steps**: Phase 4 — write list-page tests first (RED), then replace the `/mcqs` stub with the table UI. Ask before adding `dropdown-menu`.
