@@ -470,7 +470,7 @@ Run `npm test` and confirm the new cases fail.
 
 **Phase done when**: the ten cases above pass.
 
-### Phase 6: Preview and verify - PLANNED
+### Phase 6: Preview and verify - COMPLETED
 
 **Objective**: Preview records an attempt and shows correct/incorrect. Then confirm the suite, lint, and build.
 
@@ -483,18 +483,18 @@ Run `npm test` and confirm the new cases fail.
 5. On 201 with `isCorrect: false`, the teacher sees that the answer was incorrect
 
 **Then implement until GREEN**:
-1. Build `/mcqs/[id]/preview`
-2. Keep a back-to-list control
+1. ~~Build `/mcqs/[id]/preview`~~
+2. ~~Keep a back-to-list control~~
 
 **Then verify**:
-1. Run `npm test` — entire suite green. Record the count in Current Status
-2. Run `npm run lint` and `npm run build` and record the result
+1. ~~Run `npm test` — entire suite green. Record the count in Current Status~~ (`npm test`: 90 passed)
+2. ~~Run `npm run lint` and `npm run build` and record the result~~ (lint: 0 errors, 2 existing warnings; build: succeeded, includes `/mcqs/[id]/preview`)
 3. Browser walkthrough if tools are available: create (2 choices) → list row appears → edit (add a choice, save) → preview (wrong then right attempt) → delete → row gone; logout still returns to `/login`. Confirm the row stores `question` (not `description`) and `created_by_user_id`. Otherwise record that it was not run
 4. Anything that depends on `env.DB` should be checked with `npm run preview` when run locally; Cloud agents cannot do that
 
 **Deliverables**:
-- Preview page and tests
-- `npm test`, lint, and build results in Current Status
+- ~~Preview page and tests~~ (`src/app/mcqs/[id]/preview/page.tsx`, `src/components/mcqs/mcq-preview.tsx` + `.test.tsx`, 5 passing)
+- ~~`npm test`, lint, and build results in Current Status~~
 
 **Phase done when**: `npm test`, `npm run lint`, and `npm run build` succeed. A live browser click-through is recorded if tools are available.
 
@@ -516,10 +516,11 @@ Run `npm test` and confirm the new cases fail.
 - `src/app/api/mcqs/route.ts` + `route.test.ts` — GET list, POST create
 - `src/app/api/mcqs/[id]/route.ts` + `route.test.ts` — GET, PUT, DELETE
 - `src/app/api/mcqs/[id]/attempts/route.ts` + `route.test.ts` — POST attempt
-- `src/components/mcqs/` — list table, row actions, form, delete dialog; preview still planned
+- `src/components/mcqs/` — list table, row actions, form, preview, delete dialog
 - `src/app/mcqs/page.tsx` — list page (replaces stub)
 - `src/app/mcqs/new/page.tsx` — create
 - `src/app/mcqs/[id]/edit/page.tsx` — edit
+- `src/app/mcqs/[id]/preview/page.tsx` — preview
 - `src/lib/user-id-storage.ts` — `sessionStorage` key for `createdByUserId` (not a session)
 - `src/lib/db.ts` — existing `getDb()`; reuse, do not duplicate
 - `src/components/auth/logout-button.tsx` — remains on the list page
@@ -744,8 +745,12 @@ When working with this PRD:
 
 **Last Updated**: 2026-09-02
 **Current Phase**: Phase 6 - Preview and verify
-**Status**: Phase 5 COMPLETED — create/edit form with 2–6 choices, Save/Cancel, and `sessionStorage` user id. Preview not started
+**Status**: COMPLETED — preview records an attempt and shows correct/incorrect. Stopped for review
 **Verification**:
-- Form tests: RED (missing `McqForm`), then GREEN (10 passing)
-- `npm test`: 85 passed (15 files)
-**Next Steps**: Phase 6 — write preview tests first (RED), then implement `/mcqs/[id]/preview`. Then run lint, build, and a browser walkthrough.
+- Preview tests: RED (missing `McqPreview`), then GREEN (5 passing)
+- `npm test`: 90 passed (16 files)
+- `npm run lint`: 0 errors (2 existing warnings in Phase 3 files)
+- `npm run build`: succeeded — includes `/mcqs/[id]/preview`
+- Browser walkthrough: not run (no browser tools in this session)
+- `npm run preview` (Workers + D1): not run (long-running local server; not started)
+**Next Steps**: After review, commit and push Phase 6 on `feature/mcq_crud_branch` when you ask. No migrations or deploys from the agent this session.
