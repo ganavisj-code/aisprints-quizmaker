@@ -439,7 +439,7 @@ Run `npm test` and confirm the new cases fail. Rewrite or replace `mcq-stub.test
 
 **Phase done when**: the nine cases above pass.
 
-### Phase 5: Create/edit form - PLANNED
+### Phase 5: Create/edit form - COMPLETED
 
 **Objective**: Teachers can create and edit a question plus 2–6 choices, then save or cancel.
 
@@ -459,14 +459,14 @@ Run `npm test` and confirm the new cases fail. Rewrite or replace `mcq-stub.test
 Run `npm test` and confirm the new cases fail.
 
 **Then implement until GREEN**:
-1. Ask, then add `textarea` and `radio-group` if needed
-2. Build `McqForm` and pages `/mcqs/new` and `/mcqs/[id]/edit`
-3. Save and Cancel as specified
-4. On register/login 201/200, write the returned user `id` to `sessionStorage`; logout removes it; create reads it as `createdByUserId`
+1. ~~Ask, then add `textarea` and `radio-group` if needed~~
+2. ~~Build `McqForm` and pages `/mcqs/new` and `/mcqs/[id]/edit`~~
+3. ~~Save and Cancel as specified~~
+4. ~~On register/login 201/200, write the returned user `id` to `sessionStorage`; logout removes it; create reads it as `createdByUserId`~~
 
 **Deliverables**:
-- Create/edit pages and form tests
-- Phases 1–5 tests green
+- ~~Create/edit pages and form tests~~ (`src/app/mcqs/new/page.tsx`, `src/app/mcqs/[id]/edit/page.tsx`, `src/components/mcqs/mcq-form.tsx` + `.test.tsx`, 10 passing)
+- ~~Phases 1–5 tests green~~ (`npm test`: 85 passed)
 
 **Phase done when**: the ten cases above pass.
 
@@ -516,11 +516,11 @@ Run `npm test` and confirm the new cases fail.
 - `src/app/api/mcqs/route.ts` + `route.test.ts` — GET list, POST create
 - `src/app/api/mcqs/[id]/route.ts` + `route.test.ts` — GET, PUT, DELETE
 - `src/app/api/mcqs/[id]/attempts/route.ts` + `route.test.ts` — POST attempt
-- `src/components/mcqs/` — list table, row actions, form, preview, delete dialog
+- `src/components/mcqs/` — list table, row actions, form, delete dialog; preview still planned
 - `src/app/mcqs/page.tsx` — list page (replaces stub)
 - `src/app/mcqs/new/page.tsx` — create
 - `src/app/mcqs/[id]/edit/page.tsx` — edit
-- `src/app/mcqs/[id]/preview/page.tsx` — preview
+- `src/lib/user-id-storage.ts` — `sessionStorage` key for `createdByUserId` (not a session)
 - `src/lib/db.ts` — existing `getDb()`; reuse, do not duplicate
 - `src/components/auth/logout-button.tsx` — remains on the list page
 
@@ -743,9 +743,9 @@ When working with this PRD:
 ## Current Status
 
 **Last Updated**: 2026-09-02
-**Current Phase**: Phase 5 - Create/edit form
-**Status**: Phase 4 COMPLETED — `/mcqs` table UI with create, row actions, delete confirm, and logout. Create/edit form not started
+**Current Phase**: Phase 6 - Preview and verify
+**Status**: Phase 5 COMPLETED — create/edit form with 2–6 choices, Save/Cancel, and `sessionStorage` user id. Preview not started
 **Verification**:
-- List tests: RED (missing `McqList`), then GREEN (9 passing)
-- `npm test`: 75 passed (14 files)
-**Next Steps**: Phase 5 — write create/edit form tests first (RED), then implement `/mcqs/new` and `/mcqs/[id]/edit`. Ask before adding `textarea` or `radio-group`.
+- Form tests: RED (missing `McqForm`), then GREEN (10 passing)
+- `npm test`: 85 passed (15 files)
+**Next Steps**: Phase 6 — write preview tests first (RED), then implement `/mcqs/[id]/preview`. Then run lint, build, and a browser walkthrough.

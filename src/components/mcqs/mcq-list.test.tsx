@@ -184,8 +184,9 @@ describe("McqList", () => {
 		});
 	});
 
-	it("calls POST /api/logout and navigates to /login", async () => {
+	it("calls POST /api/logout, clears the stored user id, and navigates to /login", async () => {
 		const user = userEvent.setup();
+		sessionStorage.setItem("userId", "user-ada");
 		render(<McqList />);
 
 		await user.click(screen.getByRole("button", { name: /log out/i }));
@@ -194,5 +195,6 @@ describe("McqList", () => {
 			expect(fetch).toHaveBeenCalledWith("/api/logout", { method: "POST" });
 			expect(push).toHaveBeenCalledWith("/login");
 		});
+		expect(sessionStorage.getItem("userId")).toBeNull();
 	});
 });

@@ -4,6 +4,7 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 
 import { Button } from "@/components/ui/button";
+import { clearStoredUserId } from "@/lib/user-id-storage";
 
 export function LogoutButton() {
 	const router = useRouter();
@@ -14,6 +15,7 @@ export function LogoutButton() {
 		try {
 			await fetch("/api/logout", { method: "POST" });
 		} finally {
+			clearStoredUserId();
 			router.push("/login");
 			setPending(false);
 		}
